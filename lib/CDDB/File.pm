@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '0.92';
+$VERSION = '0.93';
 
 =head1 NAME
 
@@ -123,8 +123,18 @@ sub submitted_by { shift->_get_lines("# Submitted via: ")  }
 
 sub _offsets {
   my $self = shift;
-  ((grep s/^#\s+//, ($self->_data)[3 .. 2 + $self->track_count]), 
+  my $from = $self->_offset_line;
+  ((grep s/^#\s+//, ($self->_data)[$from + 1 .. $from + $self->track_count]), 
    $self->length * 75);
+}
+
+sub _offset_line {
+  my $self = shift;
+  my @data = $self->_data;
+  foreach (0 .. $#data) {
+    return $_ if $data[$_] =~ /^# Track frame offsets/;
+  }
+  return 2;
 }
 
 sub length     { 
