@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '0.94';
+$VERSION = '1.00';
 
 =head1 NAME
 
@@ -92,9 +92,9 @@ processed it at the other end.
     print $track->length, $track->extd;
   }
 
-Returns a list of Track objects, each of which knows its number (offset
-from 1, although the array is offset from 0), title, length (in seconds),
-and may also have extended track data.
+Returns a list of Track objects, each of which knows its number (numering
+from 1), title, length (in seconds), offset, and may also have extended
+track data.
 
 Tracks may also contain an 'artist' field. If this is not set the artist
 method will return the artist of the CD.
@@ -130,7 +130,7 @@ sub processed_by  { shift->_get_lines("# Processed by: ")   }
 sub _offsets {
   my $self = shift;
   my $from = $self->_offset_line;
-  ((grep s/^#\s+//, ($self->_data)[$from + 1 .. $from + $self->track_count]), 
+  ((grep s/^#\s*//, ($self->_data)[$from + 1 .. $from + $self->track_count]), 
    $self->length * 75);
 }
 
@@ -156,7 +156,7 @@ sub _title_line {
 
 sub _split_title {
   my $self = shift;
-  ($self->{_artist}, $self->{_title}) = split / \/ /, $self->_title_line, 2;
+  ($self->{_artist}, $self->{_title}) = split /\s+\/\s+/, $self->_title_line, 2;
   $self->{_title} ||= $self->{_artist};
 }
 
@@ -183,6 +183,7 @@ sub tracks {
       _number => $_+1,
       _tline  => $title[$_],
       _extd   => $extd[$_],
+      _offset => $offset[$_],
       _length => int(($offset[$_+1] - $offset[$_]) / 75),
     }, 'CDDB::File::Track'
   } 0 .. $self->_highest_track_no;
@@ -216,10 +217,11 @@ sub cd     { shift->{_cd} }
 sub extd   { shift->{_extd}  }
 sub length { shift->{_length}}
 sub number { shift->{_number}}
+sub offset { shift->{_offset}}
 
 sub _split_title {
   my $self = shift;
-  ($self->{_artist}, $self->{_title}) = split / \/ /, $self->{_tline}, 2;
+  ($self->{_artist}, $self->{_title}) = split /\s+\/\s+/, $self->{_tline}, 2;
   unless ($self->{_title}) {
     $self->{_title} = $self->{_artist};
     $self->{_artist} = $self->cd->artist;

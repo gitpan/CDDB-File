@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use Test::More tests => 31;
+use Test::More tests => 36;
 use CDDB::File;
 use strict;
 
@@ -51,5 +51,15 @@ is $tracks[17]->length, 85, "last song length";
   is $tracks[5]->artist, "Radiohead", "track artist";
   is $tracks[13]->artist, "Jill Sobule", "track artist";
   is $tracks[13]->length, 187, "last song length";
+  is $tracks[0]->offset, 150, "Starting offset 150";
+  is $tracks[-1]->offset, 218000, "Final offset";
+}
+
+{
+  my $file = "data/9a0bed0d";
+  my $disc = CDDB::File->new($file);
+  is $disc->id, "9a0bed0d", "ID correct";
+  is $disc->artist, "Chagall Guevara", "Artist";
+  is $disc->title, "Chagall Guevara", " same as title";
 }
 
