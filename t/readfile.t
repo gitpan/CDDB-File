@@ -33,7 +33,7 @@ is $tracks[0]->title, 'Weronika', "Track title";
 is $tracks[0]->artist, "Zbigniew Preisner", "Track artist = CD artist";
 is $tracks[0]->extd, 'Opening song', "Track extd info";
 is $tracks[12]->number, 13, 'Track number';
-is $tracks[12]->title, 'Theme : 2nd transcription', "multi-line title";
+is $tracks[12]->title, 'Theme / 2nd transcription', "multi-line title";
 
 is $tracks[0]->length, 40, "first song length";
 is $tracks[17]->length, 85, "last song length";

@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '1.01';
+$VERSION = '1.02';
 
 =head1 NAME
 
@@ -221,7 +221,13 @@ sub offset { shift->{_offset}}
 
 sub _split_title {
   my $self = shift;
-  ($self->{_artist}, $self->{_title}) = split /\s+\/\s+/, $self->{_tline}, 2;
+  if ($self->cd->artist eq "Various") {
+    ($self->{_artist}, $self->{_title}) = split /\s+\/\s+/, $self->{_tline}, 2
+  } else {
+    $self->{_title}  = $self->{_tline};
+    $self->{_artist} = $self->cd->artist;
+  }
+
   unless ($self->{_title}) {
     $self->{_title} = $self->{_artist};
     $self->{_artist} = $self->cd->artist;
