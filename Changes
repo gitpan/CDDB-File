@@ -1,5 +1,9 @@
 Revision history 
 
+1.03  Wed Aug 21 2002
+        - Handle length as "dddd secs" as well as "dddd seconds"
+           (Thanks to Andy Warley)
+
 1.02  Tue Feb 19 2002
         - Only extract separate artist for song titles if the CD artist
            is "Various" (as per specification). 

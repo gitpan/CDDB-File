@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '1.02';
+$VERSION = '1.03';
 
 =head1 NAME
 
@@ -145,7 +145,7 @@ sub _offset_line {
 
 sub length     { 
   my $length = shift->_get_lines("# Disc length: ");
-     $length =~ s/ seconds//;
+     $length =~ s/ sec(ond)?s//;
   return $length;
 }
 
