@@ -3,5 +3,6 @@ MANIFEST
 Makefile.PL
 data/be0c140e
 data/ee074b12
+data/9a0bed0d
 lib/CDDB/File.pm
 t/readfile.t
