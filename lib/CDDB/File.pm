@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '0.91';
+$VERSION = '0.92';
 
 =head1 NAME
 
@@ -86,12 +86,16 @@ The software which submitted this information to freedb.
 =head2 tracks
 
   foreach my $track ($disc->tracks) {
-    print $track->number, $track->title, $track->length, $track->extd
+    print $track->number, $track->title, $track->artist;
+    print $track->length, $track->extd;
   }
 
 Returns a list of Track objects, each of which knows its number (offset
 from 1, although the array is offset from 0), title, length (in seconds),
 and may also have extended track data.
+
+Tracks may also contain an 'artist' field. If this is not set the artist
+method will return the artist of the CD.
 
 =cut
 
@@ -159,10 +163,11 @@ sub tracks {
   my @offset = $self->_offsets;
   return map {
     bless { 
-      number => $_+1,
-      title  => $title[$_],
-      extd   => $extd[$_],
-      length => int(($offset[$_+1] - $offset[$_]) / 75),
+      _cd     => $self,
+      _number => $_+1,
+      _tline  => $title[$_],
+      _extd   => $extd[$_],
+      _length => int(($offset[$_+1] - $offset[$_]) / 75),
     }, 'CDDB::File::Track'
   } 0 .. $self->_highest_track_no;
 }
@@ -191,10 +196,31 @@ package CDDB::File::Track;
 use overload 
   '""'  => 'title';
 
-sub title  { shift->{title} }
-sub extd   { shift->{extd}  }
-sub length { shift->{length}}
-sub number { shift->{number}}
+sub cd     { shift->{_cd} }
+sub extd   { shift->{_extd}  }
+sub length { shift->{_length}}
+sub number { shift->{_number}}
+
+sub _split_title {
+  my $self = shift;
+  ($self->{_artist}, $self->{_title}) = split / \/ /, $self->{_tline}, 2;
+  unless ($self->{_title}) {
+    $self->{_title} = $self->{_artist};
+    $self->{_artist} = $self->cd->artist;
+  }
+}
+
+sub title {
+  my $self = shift;
+  $self->_split_title unless defined $self->{_title};
+  $self->{_title};
+}
+
+sub artist {
+  my $self = shift;
+  $self->_split_title unless defined $self->{_artist};
+  $self->{_artist};
+}
 
 1;
 

@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use Test::More tests => 24;
+use Test::More tests => 28;
 use CDDB::File;
 use strict;
 
@@ -27,6 +27,7 @@ isa_ok $tracks[0], 'CDDB::File::Track';
 isa_ok $tracks[17], 'CDDB::File::Track';
 is $tracks[0]->number, 1, "Track number";
 is $tracks[0]->title, 'Weronika', "Track title";
+is $tracks[0]->artist, "Zbigniew Preisner", "Track artist = CD artist";
 is $tracks[0]->extd, 'Opening song', "Track extd info";
 is $tracks[12]->number, 13, 'Track number';
 is $tracks[12]->title, 'Theme : 2nd transcription', "multi-line title";
@@ -35,12 +36,16 @@ is $tracks[0]->length, 40, "first song length";
 is $tracks[17]->length, 85, "last song length";
 
 {
-  my $file = "data/af10420e";
+  my $file = "data/be0c140e";
   my $disc = CDDB::File->new($file);
-  is $disc->id, "2203fd04", "ID correct";
+  is $disc->id, "af10420e", "ID correct";
   my @ids = $disc->all_ids;
   is scalar @ids, 2, "Disc has 2 ids";
-  ok eq_set(\@ids, [qw/2203fd04 af10420e/]), "Both correct";
+  ok eq_set(\@ids, [qw/af10420e be0c140e/]), "Both correct";
   my @tracks = $disc->tracks;
-  is $tracks[13]->length, 180 + 43, "Heather Nova";
+  is $tracks[3]->artist, "Various", "no track artist";
+  is $tracks[5]->artist, "Radiohead", "track artist";
+  is $tracks[13]->artist, "Jill Sobule", "track artist";
+  is $tracks[13]->length, 187, "last song length";
 }
+
