@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use Test::More tests => 28;
+use Test::More tests => 31;
 use CDDB::File;
 use strict;
 
@@ -16,7 +16,10 @@ is $disc->genre, "Classical", "genre";
 is $disc->extd, "The soundtrack to La Double Vie De Veronique", "extd";
 is $disc->length, 1869, "length";
 is $disc->revision, 3, "revision no";
-is $disc->submitted_by, "Grip 2.95", "submitter";
+is $disc->submitted_via, "Grip 2.95", "submitter";
+is $disc->submitted_by, "Grip 2.95", "submitter (deprecated)";
+is $disc->processed_by, "cddbd v1.4b42PL1 Copyright (c) Steve Scherf et al.",
+    "processed by";
 
 is $disc->track_count, 18, "track count";
 
@@ -39,6 +42,7 @@ is $tracks[17]->length, 85, "last song length";
   my $file = "data/be0c140e";
   my $disc = CDDB::File->new($file);
   is $disc->id, "af10420e", "ID correct";
+  is $disc->year, '', "year";
   my @ids = $disc->all_ids;
   is scalar @ids, 2, "Disc has 2 ids";
   ok eq_set(\@ids, [qw/af10420e be0c140e/]), "Both correct";

@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '0.93';
+$VERSION = '0.94';
 
 =head1 NAME
 
@@ -11,14 +11,15 @@ CDDB::File - Parse a CDDB/freedb data file
   my $disc = CDDB::File->new("rock/f4109511");
 
   print $disc->id, $disc->all_ids;
-  print $disc->artist, $disc->title, $disc->year;
+  print $disc->artist, $disc->title;
   print $disc->year, $disc->genre, $disc->extd;
   print $disc->length, $disc->track_count;
   
-  print $disc->revision, $disc->submitted_by;
+  print $disc->revision, $disc->submitted_via, $disc->processed_by;
 
   foreach my $track ($disc->tracks) {
-    print $track->number, $track->title, $track->length, $track->extd
+    print $track->number, $track->title, $track->artist;
+    print $track->length, $track->extd;
   }
 
 =head1 DESCRIPTION
@@ -79,9 +80,10 @@ The number of tracks on the CD.
 Each time information regarding the CD is updated this revision number
 is incremented. This returns the revision number of this version.
 
-=head2 submitted_by
+=head2 submitted_via / processed_by
 
-The software which submitted this information to freedb.
+The software which submitted this information to freedb and which
+processed it at the other end.
 
 =head2 tracks
 
@@ -113,13 +115,17 @@ sub new {
 
 sub _data { @{shift->{_data}} }
 
-sub id           { (shift->all_ids)[0]                     }
-sub all_ids      { split /,/, shift->_get_lines("DISCID=") }
-sub year         { shift->_get_lines("DYEAR=")             }
-sub genre        { shift->_get_lines("DGENRE=")            }
-sub extd         { shift->_get_lines("EXTD=")              }
-sub revision     { shift->_get_lines("# Revision: ")       }
-sub submitted_by { shift->_get_lines("# Submitted via: ")  }
+sub id            { (shift->all_ids)[0]                     }
+sub all_ids       { split /,/, shift->_get_lines("DISCID=") }
+sub year          { shift->_get_lines("DYEAR=")             }
+sub genre         { shift->_get_lines("DGENRE=")            }
+sub extd          { shift->_get_lines("EXTD=")              }
+sub revision      { shift->_get_lines("# Revision: ")       }
+sub submitted_via { shift->_get_lines("# Submitted via: ")  }
+sub processed_by  { shift->_get_lines("# Processed by: ")   }
+
+# For backwards compatibility
+*submitted_by = \&submitted_via;
 
 sub _offsets {
   my $self = shift;

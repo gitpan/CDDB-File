@@ -1,5 +1,9 @@
 Revision history 
 
+0.93  Sat Dec  8 2001
+        - Added support for 'processed_by'
+        - renamed 'submitted_by' to 'submitted_via'
+
 0.93  Wed Dec  5 2001
         - Fixed bug where track offsets were being calculated incorrectly
           for some files with slightly different data format
