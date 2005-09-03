@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 
-use Test::More tests => 36;
+use Test::More tests => 35;
 use CDDB::File;
 use strict;
 
@@ -17,7 +17,6 @@ is $disc->extd, "The soundtrack to La Double Vie De Veronique", "extd";
 is $disc->length, 1869, "length";
 is $disc->revision, 3, "revision no";
 is $disc->submitted_via, "Grip 2.95", "submitter";
-is $disc->submitted_by, "Grip 2.95", "submitter (deprecated)";
 is $disc->processed_by, "cddbd v1.4b42PL1 Copyright (c) Steve Scherf et al.",
     "processed by";
 

@@ -1,5 +1,8 @@
 Revision history 
 
+1.04  Sat Sep  3 15:19:08 UTC 2005
+        - Remove obsolete submitted_by (should be using submitted_via)
+
 1.03  Wed Aug 21 2002
         - Handle length as "dddd secs" as well as "dddd seconds"
            (Thanks to Andy Warley)

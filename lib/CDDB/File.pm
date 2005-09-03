@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '1.03';
+$VERSION = '1.04';
 
 =head1 NAME
 
@@ -80,7 +80,7 @@ The number of tracks on the CD.
 Each time information regarding the CD is updated this revision number
 is incremented. This returns the revision number of this version.
 
-=head2 submitted_via / processed_by
+=head2 processed_by / submitted_via 
 
 The software which submitted this information to freedb and which
 processed it at the other end.
@@ -123,9 +123,6 @@ sub extd          { shift->_get_lines("EXTD=")              }
 sub revision      { shift->_get_lines("# Revision: ")       }
 sub submitted_via { shift->_get_lines("# Submitted via: ")  }
 sub processed_by  { shift->_get_lines("# Processed by: ")   }
-
-# For backwards compatibility
-*submitted_by = \&submitted_via;
 
 sub _offsets {
   my $self = shift;
@@ -252,19 +249,24 @@ sub artist {
 
 http://www.freedb.org/
 
-=head1 FEEDBACK
-
-If you find this module useful, or have any comments, suggestions or
-improvements, please let me know.
-
 =head1 AUTHOR
 
 Tony Bowden, E<lt>kasei@tmtm.comE<gt>.
 
+=head1 BUGS and QUERIES
+
+Please direct all correspondence regarding this module to:
+  bug-CDDB-File@rt.cpan.org
+
 =head1 COPYRIGHT
 
-Copyright (C) 2001 Tony Bowden. All rights reserved.
+  Copyright (C) 2001-2005 Tony Bowden. All rights reserved.
 
-This module is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+  This program is free software; you can redistribute it and/or modify it under
+  the terms of the GNU General Public License; either version 2 of the License,
+  or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful, but WITHOUT
+  ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+  FOR A PARTICULAR PURPOSE.
 
