@@ -1,6 +1,6 @@
 package CDDB::File;
 
-$VERSION = '1.04';
+$VERSION = '1.05';
 
 =head1 NAME
 
@@ -251,7 +251,7 @@ http://www.freedb.org/
 
 =head1 AUTHOR
 
-Tony Bowden, E<lt>kasei@tmtm.comE<gt>.
+Tony Bowden
 
 =head1 BUGS and QUERIES
 
